@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عطارة الخير | أجود أنواع التوابل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-brown: #5d4037; 
+            --accent-green: #2e7d32;  
+            --bg-beige: #fdfaf5;      
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-beige);
+            margin: 0;
+            padding-bottom: 120px;
+            color: #333;
+        }
+
+        nav {
+            background: var(--primary-brown);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .logo-img {
+            max-height: 90px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-bottom: 5px;
+        }
+
+        .container { max-width: 1100px; margin: auto; padding: 20px; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .item-card:hover { transform: translateY(-5px); }
+
+        .item-img { width: 100%; height: 200px; object-fit: cover; }
+        .details { padding: 15px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .item-desc {
+            font-size: 0.85rem;
+            color: #777;
+            margin: 5px 0 10px 0;
+            line-height: 1.4;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .price-tag { color: var(--primary-brown); font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; }
+
+        .order-options {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        .option-group { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        
+        .custom-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Cairo';
+        }
+
+        .add-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: auto;
+        }
+
+        /* السلة */
+        .cart-bar {
+            position: fixed;
+            bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px;
+            background: var(--primary-brown);
+            color: white; padding: 15px 25px;
+            border-radius: 50px; display: flex;
+            justify-content: space-between; align-items: center;
+            cursor: pointer; z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        #cart-modal {
+            display: none; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 2000;
+            justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: white; width: 90%; max-width: 450px;
+            padding: 25px; border-radius: 20px;
+        }
+        .cart-item {
+            display: flex; justify-content: space-between;
+            padding: 10px 0; border-bottom: 1px solid #eee; align-items: center;
+        }
+        .delete-btn {
+            background: #ff4d4d; color: white; border: none;
+            padding: 2px 8px; border-radius: 5px; cursor: pointer; margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <img src="https://i.ibb.co/vzPRm99/3d-store-logo.png" class="logo-img" alt="لوجو العطارة">
+    <h2 style="margin:5px 0">عطارة الخير</h2>
+</nav>
+
+<div class="container">
+    <div class="grid">
+        
+        <div class="item-card">
+            <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400" class="item-img">
+            <div class="details">
+                <h3>كمون بلدي حصى</h3>
+                <p class="item-desc">منقّى بعناية، طعم بلدي أصيل ورائحة نفاذة تظهر جمال طبخك وتدعم الهضم.</p>
+                <p class="price-tag">سعر الكيلو: 400 ج.م</p>
+                <div class="order-options">
+                    <div class="option-group">
+                        <input type="radio" name="opt-1" id="r-w-1" checked onclick="toggleMode(1, 'w')">
+                        <label for="r-w-1">وزن</label>
+                        <select class="custom-input" id="w-1">
+                            <option value="0.125">ثمن كيلو</option>
+                            <option value="0.25">ربع كيلو</option>
+                            <option value="0.5">نص كيلو</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <input type="radio" name="opt-1" id="r-p-1" onclick="toggleMode(1, 'p')">
+                        <label for="r-p-1">بمبلغ</label>
+                        <input type="number" id="p-1" class="custom-input" placeholder="ج.م" disabled>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addToCart(1, 'كمون بلدي', 400)">إضافة للطلب 🛒</button>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <img src="https://images.unsplash.com/photo-1532336414038-cf19250c5757?w=400" class="item-img">
+            <div class="details">
+                <h3>فلفل أسود برازيلي</h3>
+                <p class="item-desc">حبوب كاملة نمرة 1، يتميز بنكهة حرّاقة قوية وزيوت طيارة تظهر طعم المشويات.</p>
+                <p class="price-tag">سعر الكيلو: 520 ج.م</p>
+                <div class="order-options">
+                    <div class="option-group">
+                        <input type="radio" name="opt-2" id="r-w-2" checked onclick="toggleMode(2, 'w')">
+                        <label for="r-w-2">وزن</label>
+                        <select class="custom-input" id="w-2">
+                            <option value="0.125">ثمن كيلو</option>
+                            <option value="0.25">ربع كيلو</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <input type="radio" name="opt-2" id="r-p-2" onclick="toggleMode(2, 'p')">
+                        <label for="r-p-2">بمبلغ</label>
+                        <input type="number" id="p-2" class="custom-input" placeholder="ج.م" disabled>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addToCart(2, 'فلفل أسود', 520)">إضافة للطلب 🛒</button>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <img src="https://th.bing.com/th/id/OIP.9TQWPYo1PffzKuHmnwCk1gHaFK?w=241&h=180&c=7&r=0&o=7&pid=1.7&rm=3" class="item-img">
+            <div class="details">
+                <h3>عود بخور ملكي</h3>
+                <p class="item-desc">رائحة فخمة تدوم طويلاً، طبيعي 100% ومثالي للمجالس والمناسبات الرسمية.</p>
+                <p class="price-tag">سعر الكيلو: 1200 ج.م</p>
+                <div class="order-options">
+                    <div class="option-group">
+                        <input type="radio" name="opt-3" id="r-w-3" checked onclick="toggleMode(3, 'w')">
+                        <label for="r-w-3">وزن</label>
+                        <select class="custom-input" id="w-3">
+                            <option value="0.125">ثمن كيلو</option>
+                            <option value="0.25">ربع كيلو</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <input type="radio" name="opt-3" id="r-p-3" onclick="toggleMode(3, 'p')">
+                        <label for="r-p-3">بمبلغ</label>
+                        <input type="number" id="p-3" class="custom-input" placeholder="ج.م" disabled>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addToCart(3, 'عود ملكي', 1200)">إضافة للطلب 🛒</button>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <img src="https://th.bing.com/th/id/OIP.a7FchJq-nkSNMIZ7N_V_IQHaHa?w=203&h=203&c=7&r=0&o=7&pid=1.7&rm=3" class="item-img">
+            <div class="details">
+                <h3>بابريكا مدخنة</h3>
+                <p class="item-desc">لون أحمر زاهي وطعم مدخن أصلي، تعطي مذاقاً رائعاً للمشويات والبطاطس.</p>
+                <p class="price-tag">سعر الكيلو: 320 ج.م</p>
+                <div class="order-options">
+                    <div class="option-group">
+                        <input type="radio" name="opt-4" id="r-w-4" checked onclick="toggleMode(4, 'w')">
+                        <label for="r-w-4">وزن</label>
+                        <select class="custom-input" id="w-4">
+                            <option value="0.125">ثمن</option><option value="0.25">ربع</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <input type="radio" name="opt-4" id="r-p-4" onclick="toggleMode(4, 'p')">
+                        <label for="r-p-4">بمبلغ</label>
+                        <input type="number" id="p-4" class="custom-input" placeholder="ج.م" disabled>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addToCart(4, 'بابريكا مدخنة', 320)">إضافة للطلب 🛒</button>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <img src="https://th.bing.com/th/id/OIP.yigPurd3_C8N5yFWqsiCCgHaDh?w=314&h=166&c=7&r=0&o=7&pid=1.7&rm=3" class="item-img">
+            <div class="details">
+                <h3>السبع بهارات</h3>
+                <p class="item-desc">توليفة الحاج الخاصة لكل أنواع المحاشي والطواجن المصرية الأصيلة.</p>
+                <p class="price-tag">سعر الكيلو: 480 ج.م</p>
+                <div class="order-options">
+                    <div class="option-group">
+                        <input type="radio" name="opt-5" id="r-w-5" checked onclick="toggleMode(5, 'w')">
+                        <label for="r-w-5">وزن</label>
+                        <select class="custom-input" id="w-5">
+                            <option value="0.125">ثمن</option><option value="0.25">ربع</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <input type="radio" name="opt-5" id="r-p-5" onclick="toggleMode(5, 'p')">
+                        <label for="r-p-5">بمبلغ</label>
+                        <input type="number" id="p-5" class="custom-input" placeholder="ج.م" disabled>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addToCart(5, 'سبع بهارات', 480)">إضافة للطلب 🛒</button>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <img src="https://th.bing.com/th/id/OIP.lyuW-lZYNHMDYEGE90E8KQHaHa?w=187&h=187&c=7&r=0&o=7&pid=1.7&rm=3" class="item-img">
+            <div class="details">
+                <h3>كزبرة مطحونة</h3>
+                <p class="item-desc">كزبرة بلدي محمصة ومطحونة طازجة، سر طشة الملوخية والتقلية المصرية.</p>
+                <p class="price-tag">سعر الكيلو: 240 ج.م</p>
+                <div class="order-options">
+                    <div class="option-group">
+                        <input type="radio" name="opt-6" id="r-w-6" checked onclick="toggleMode(6, 'w')">
+                        <label for="r-w-6">وزن</label>
+                        <select class="custom-input" id="w-6">
+                            <option value="0.125">ثمن</option><option value="0.25">ربع</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <input type="radio" name="opt-6" id="r-p-6" onclick="toggleMode(6, 'p')">
+                        <label for="r-p-6">بمبلغ</label>
+                        <input type="number" id="p-6" class="custom-input" placeholder="ج.م" disabled>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="addToCart(6, 'كزبرة مطحونة', 240)">إضافة للطلب 🛒</button>
+            </div>
+        </div>
+
+         <div class="item-card">
+            <img src="https://th.bing.com/th/id/OIP.Wm24D-rbWCONbATMa3Z-HAHaD4?w=327&h=180&c=7&r=0&o=7&pid=1.7&rm=3">
+         </div>
+
+    </div>
+</div>
+
+<div class="cart-bar" onclick="openCart()">
+    <div>🛒 السلة: <span id="cart-count">0</span> أصناف</div>
+    <div style="font-weight:bold">مراجعة الطلب 📥</div>
+</div>
+
+<div id="cart-modal">
+    <div class="modal-content">
+        <h3 style="text-align:center; color:var(--primary-brown)">قائمة طلباتك 📝</h3>
+        <div id="modal-items-list" style="margin:10px 0; max-height:200px; overflow-y:auto;"></div>
+        <h4 style="text-align:center">الإجمالي: <span id="total-price">0</span> ج.م</h4>
+        <textarea id="order-notes" placeholder="ملاحظات (مثلاً: عاوزه مطحون ناعم...)" 
+                  style="width:100%; height:50px; margin-bottom:10px; padding:5px; font-family:inherit;"></textarea>
+        <button onclick="sendOrder()" style="background:#25d366; color:white; border:none; width:100%; padding:15px; border-radius:10px; font-weight:bold; cursor:pointer">إرسال عبر واتساب ✅</button>
+        <button onclick="closeCart()" style="background:none; color:gray; border:none; width:100%; margin-top:10px; cursor:pointer">إغلاق</button>
+    </div>
+</div>
+
+<script>
+    let cart = [];
+
+    function toggleMode(id, type) {
+        document.getElementById('w-' + id).disabled = (type === 'p');
+        document.getElementById('p-' + id).disabled = (type === 'w');
+    }
+
+    function addToCart(id, name, priceKilo) {
+        let finalPrice = 0, finalWeight = "";
+        const isWeight = document.getElementById('r-w-' + id).checked;
+
+        if (isWeight) {
+            const wVal = parseFloat(document.getElementById('w-' + id).value) || 0;
+            finalPrice = priceKilo * wVal;
+            finalWeight = document.getElementById('w-' + id).options[document.getElementById('w-' + id).selectedIndex].text;
+        } else {
+            const pVal = parseFloat(document.getElementById('p-' + id).value) || 0;
+            if (pVal <= 0) return alert("اكتب المبلغ!");
+            finalPrice = pVal;
+            finalWeight = `بـ ${pVal} ج (حوالي ${Math.round((pVal/priceKilo)*1000)}جم)`;
+        }
+
+        cart.push({ name, weight: finalWeight, price: Math.round(finalPrice) });
+        document.getElementById('cart-count').innerText = cart.length;
+        alert("تمت الإضافة ✅");
+    }
+
+    function removeFromCart(index) {
+        if(confirm("مسح الصنف ده؟")) {
+            cart.splice(index, 1);
+            document.getElementById('cart-count').innerText = cart.length;
+            cart.length > 0 ? openCart() : closeCart();
+        }
+    }
+
+    function openCart() {
+        if (cart.length === 0) return alert("السلة فاضية!");
+        const list = document.getElementById('modal-items-list');
+        list.innerHTML = ""; let total = 0;
+        cart.forEach((item, index) => {
+            total += item.price;
+            list.innerHTML += `<div class="cart-item">
+                <span><button class="delete-btn" onclick="removeFromCart(${index})">X</button> ${item.name}</span>
+                <b>${item.price}ج</b>
+            </div>`;
+        });
+        document.getElementById('total-price').innerText = total;
+        document.getElementById('cart-modal').style.display = "flex";
+    }
+
+    function closeCart() { document.getElementById('cart-modal').style.display = "none"; }
+
+    function sendOrder() {
+        let msg = "*طلب جديد من عطارة الخير*%0A%0A";
+        let total = 0;
+        cart.forEach((item, i) => {
+            msg += `${i+1}- ${item.name} (${item.weight}) : ${item.price}ج%0A`;
+            total += item.price;
+        });
+        const notes = document.getElementById('order-notes').value;
+        if(notes) msg += `%0A*ملاحظات:* ${notes}`;
+        msg += `%0A%0A*الإجمالي:* ${total} ج.م`;
+        window.open(`https://wa.me/201094738516?text=${msg}`);
+    }
+</script>
+</body>
+</html>
